@@ -77,23 +77,26 @@ class App extends Component {
         <div className="row justify-content-center py-5">
           <div className="col-8 text-center">
             <h1 className="pb-2">Flashcards!</h1>
-            <p className="pb-2">An app for studying common JavaScript methods.</p>
-            <button className="btn btn-danger btn-lg" onClick={this.generateFlashcard}>Generate</button>
+            <div className="flashcard">
+              <p className="pb-2">An app for studying common JavaScript methods.</p>
+              <button className="btn btn-danger btn-lg" onClick={this.generateFlashcard}>Generate</button>
+            </div>
+            <div className="row justify-content-center">
+              {this.state.name
+                ? <Card
+                description={this.state.description}
+                tags={this.state.tags}
+                example={this.state.example}
+                /> 
+                : '' } 
+            </div>
             <div className="form-group">
-              <label for="exampleFormControlTextarea1">Type response here  </label>
+              <label for="exampleFormControlTextarea1">Type response here:  </label>
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+              <button className="btn btn-dark btn-sm" >Submit</button>
             </div>
           </div>
         </div> 
-        <div className="row justify-content-center">
-        {this.state.name
-          ? <Card
-          description={this.state.description}
-          tags={this.state.tags}
-          example={this.state.example}
-          /> 
-          : '' }
-        </div>
       </div>
     );
   }
