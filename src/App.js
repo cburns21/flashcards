@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Card from './components/card';
+import AppRouter from './components/router';
+
 // import Data from './components/data';
 
 
@@ -10,41 +12,18 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-        tags: [
-          "string",
-          "array",
-          "object",
-          "includesCallback",
-          "easy",
-          "medium",
-          "hard",
-        ],
-        methods: [{
-          id: 1,
-          name: '.map',
-          description: 'creates a new array with the results of calling a provided function on every element in the calling array.',
-          example: '',
-          tags: ["array", "medium"],
-          link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map'
-          },
-          {
-          id: 2,
-          name: '.filter',
-          description: 'creates a new array with all elements that pass the test implemented by the provided function.',
-          example: "ar words = ['spray', 'limit' 'elite', 'exuberant', 'destruction' 'present'] const result = words.filter(word => word.length > 6) console.log(result) // expected output: Array ['exuberant', 'destruction', 'present']",
-          tags: ["array", "medium"],
-          link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter'
-          },
-          {
-          id: 3,
-          name: '.reduce',
-          description: 'executes a reducer function (that you provide) on each member of the array resulting in a single output value.',
-          example: '',
-          tags: ["array", "hard"],
-          link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce'
-          }]
-      
+        notecards: []      
     }
+  }
+
+
+
+  async componentDidMount() {
+    const response = await fetch('http://localhost:3000')
+    const json = await response.json()
+  
+    this.setState({notecards: json})
+    this.generateFlashcard()
   }
   
   getRandomIntInclusive = (max) => {
@@ -54,20 +33,22 @@ class App extends Component {
 
   generateFlashcard = (e) => {
     console.log('generateFlashcard')
-    const randomIndex = this.getRandomIntInclusive(this.state.methods.length - 1)
-    const randomCard = this.state.methods[randomIndex]
+    const randomIndex = this.getRandomIntInclusive(this.state.notecards.length - 1)
+    const randomCard = this.state.notecards[randomIndex]
     console.log(randomCard)
     this.setState({
       name: randomCard.name,
       description: randomCard.description,
-      tags: randomCard.tags,
+      // tags: randomCard.tags,
       link: randomCard.link,
-      example: randomCard.example
+      // example: randomCard.example
     })
   }
 
+
+
   render() {
-    console.log(this.state.methods)
+    console.log(this.state.notecards)
     return (
       <div className="App">
         <div className="row navbar justify-content-end pb-5">
@@ -77,9 +58,10 @@ class App extends Component {
         <div className="row justify-content-center py-5">
           <div className="col-8 text-center">
             <h1 className="pb-2">Flashcards!</h1>
+            <div><AppRouter></AppRouter></div>
             <div className="flashcard">
               <p className="pb-2">An app for studying common JavaScript methods.</p>
-              <button className="btn btn-danger btn-lg" onClick={this.generateFlashcard}>Generate</button>
+              <button className="btn btn-danger btn-lg"  onClick={this.generateFlashcard}>Generate</button>
             </div>
             <div className="row justify-content-center">
               {this.state.name
@@ -91,8 +73,8 @@ class App extends Component {
                 : '' } 
             </div>
             <div className="form-group">
-              <label for="exampleFormControlTextarea1">Type response here:  </label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+              <label htmlFor="exampleFormControlTextarea1">Type response here:  </label>
+              <textarea className="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
               <button className="btn btn-dark btn-sm" >Submit</button>
             </div>
           </div>
